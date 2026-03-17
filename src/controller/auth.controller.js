@@ -11,7 +11,7 @@ async function registerUser(req, res) {
       username,
       email,
       password,
-      fullName: { firstName, lastName },
+      fullName: { firstName, lastName }, role
     } = req.body;
 
     const isUserAlreadyExist = await userModel.findOne({
@@ -34,7 +34,7 @@ async function registerUser(req, res) {
         firstName,
         lastName,
       },
-      role: "user",
+      role: role || 'user' ,// Default role is 'user' if not provided
     });
 
     const token = jwt.sign(
