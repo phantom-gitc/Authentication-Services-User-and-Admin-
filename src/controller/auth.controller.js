@@ -181,7 +181,8 @@ async function logoutUser(req, res) {
 // Addresses: list, add, delete
 async function listAddresses(req, res) {
   try {
-    const user = await userModel.findById(req.user.id);
+    const userId = req.user.id;
+    const user = await userModel.findById(userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
     return res.status(200).json({ addresses: user.addresses });
   } catch (err) {
@@ -193,17 +194,10 @@ async function listAddresses(req, res) {
 // Add address with street, city, state, zip code, country, phone, and pincode. Validate phone and pincode formats.
 async function addAddress(req, res) {
   try {
-    const { street, city, state, zipCode, country, phone, pincode } = req.body;
+    const { street, city, state, zipCode, country, phone, pincode   } = req.body;
 
-    // basic validation
-    if (!phone || !/^[0-9]{10}$/.test(phone)) {
-      return res.status(400).json({ message: 'Invalid phone' });
-    }
-    if (!pincode || !/^[0-9]{6}$/.test(pincode)) {
-      return res.status(400).json({ message: 'Invalid pincode' });
-    }
-
-    const user = await userModel.findById(req.user.id);
+    const userId = req.user.id;
+    const user = await userModel.findById(userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const addr = {
@@ -233,10 +227,7 @@ async function deleteAddress(req, res) {
     const user = await userModel.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const subdoc = user.addresses.id(addressId);
-    if (!subdoc) return res.status(404).json({ message: 'Address not found' });
-
-    subdoc.remove();
+    user.addresses.pull(addressId);
     await user.save();
 
     return res.status(200).json({ message: 'Address removed' });

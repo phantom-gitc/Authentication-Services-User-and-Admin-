@@ -29,7 +29,6 @@ const registerUserValidation = [
     resposeWithValidationErrors,
 ];
 
-
 const loginValidation = [
     body("email").optional().isEmail().withMessage("Invalid email format"),
 
@@ -49,12 +48,58 @@ const loginValidation = [
                 .status(400)
                 .json({ message: "Either email or username is required" });
         }
-        resposeWithValidationErrors(req, res, next)
+        resposeWithValidationErrors(req, res, next);
     },
+];
 
+const addUserAddressValidation = [
+    body("street")
+        .trim()
+        .notEmpty()
+        .withMessage("Street is required")
+        .isLength({ min: 3, max: 150 })
+        .withMessage("Street must be between 3 and 150 characters"),
+
+    body("city")
+        .trim()
+        .notEmpty()
+        .withMessage("City is required")
+        .isLength({ min: 2, max: 50 })
+        .withMessage("City must be between 2 and 50 characters"),
+
+    body("state")
+        .trim()
+        .notEmpty()
+        .withMessage("State is required")
+        .isLength({ min: 2, max: 50 })
+        .withMessage("State must be between 2 and 50 characters"),
+
+    body("country")
+        .trim()
+        .notEmpty()
+        .withMessage("Country is required")
+        .isLength({ min: 2, max: 50 })
+        .withMessage("Country must be between 2 and 50 characters"),
+
+    body("pincode")
+        .trim()
+        .notEmpty()
+        .withMessage("Pincode is required")
+        .isPostalCode("IN")
+        .withMessage("Invalid Indian pincode"),
+
+    body("phone")
+        .trim()
+        .notEmpty()
+        .withMessage("Phone number is required")
+        .isMobilePhone("en-IN")
+        .withMessage("Invalid phone number"),
+
+    resposeWithValidationErrors,
 ];
 
 module.exports = {
     registerUserValidation,
     loginValidation,
+    addUserAddressValidation,
 };

@@ -23,7 +23,7 @@ router.get('/logout', authMiddleware.authMiddleware, authController.logoutUser);
 
 // Addresses routes
 router.get('/users/me/addresses', authMiddleware.authMiddleware, authController.listAddresses);
-router.post('/users/me/addresses', authMiddleware.authMiddleware, authController.addAddress);
+router.post('/users/me/addresses', authMiddleware.authMiddleware, validators.addUserAddressValidation, authController.addAddress);
 router.delete('/users/me/addresses/:addressId', authMiddleware.authMiddleware, authController.deleteAddress);
 
 

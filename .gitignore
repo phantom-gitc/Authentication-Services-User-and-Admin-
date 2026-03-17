@@ -14,3 +14,10 @@ coverage/
 .vscode/
 .DS_Store
 Thumbs.db
+dist/
+build/
+.cache/
+.tmp/
+.idea/
+*.swp
+*.swo
